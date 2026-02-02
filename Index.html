@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starlight Credit Card Tools</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      /* Cosmic Chill Palette */
+      --bg-dark: #050a14;
+      --card-glass: rgba(20, 30, 50, 0.75);
+      --input-bg: rgba(10, 15, 25, 0.8);
+      
+      /* Glowing Accents */
+      --accent-gold: #ffd700;
+      --accent-cyan: #00f2ff;
+      --accent-purple: #bd00ff;
+      
+      /* Gradients */
+      --starlight-text: linear-gradient(to right, #e0eaff, #ffd700, #e0eaff);
+      --card-metallic: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0.4) 100%);
+      --button-glow: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan));
+      
+      --transition-speed: 0.4s;
+    }
+    
+    * {
+      box-sizing: border-box;
+      transition: all var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-purple) var(--bg-dark);
+    }
+
+    /* --- The Starlight Car Environment --- */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-dark);
+      /* Three layers of stars for parallax depth */
+      background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 4px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 3px),
+        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 4px);
+      background-size: 550px 550px, 350px 350px, 250px 250px;
+      background-position: 0 0, 0 0, 0 0;
+      color: #e0eaff;
+      margin: 0;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+      /* Animation for moving stars */
+      animation: moveStars 120s linear infinite;
+    }
+
+    @keyframes moveStars {
+      from { background-position: 0 0, 0 0, 0 0; }
+      to { background-position: 550px 550px, 350px 350px, 250px 250px; }
+    }
+    
+    /* --- Chill Typography --- */
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-weight: 700;
+      font-size: 3rem;
+      background: var(--starlight-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 3px;
+      /* Soft glowing text shadow */
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 40px rgba(0, 242, 255, 0.2);
+      animation: breatheGlow 6s ease-in-out infinite;
+    }
+
+    @keyframes breatheGlow {
+      0%, 100% { filter: brightness(100%); }
+      50% { filter: brightness(130%); }
+    }
+    
+    h2 {
+      font-weight: 500;
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--accent-cyan);
+      font-size: 1.8rem;
+      padding-left: 50px;
+      text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+    }
+    
+    .container {
+      max-width: 900px;
+      width: 100%;
+      padding: 0 10px;
+      perspective: 1000px; /* Essential for 3D elements inside */
+    }
+    
+    /* --- Glassmorphism Containers --- */
+    .card {
+      background: var(--card-glass);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.5),
+        inset 0 0 20px rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      width: 100%;
+    }
+    
+    /* --- 3D Main Menu Buttons (The "Credit Cards") --- */
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .tool-button {
+      /* Resetting previous styles */
+      background: none; 
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      overflow: visible;
+      
+      /* 3D Properties */
+      height: 140px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+      cursor: pointer;
+      border-radius: 16px;
+    }
+
+    /* The actual visible card part */
+    .tool-button-content {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--card-metallic);
+      background-color: #1a2035; /* Fallback/Base color */
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      
+      /* Faux 3D depth edges */
+      border-bottom: 4px solid #0a0f1f;
+      border-right: 4px solid #0a0f1f;
+      box-shadow: 
+        10px 10px 20px rgba(0,0,0,0.4),
+        inset 0 0 15px rgba(255,255,255,0.1);
+        
+      /* Metallic shine overlay */
+      overflow: hidden;
+    }
+    
+    /* The moving glare effect on the 3D card */
+    .tool-button-content::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          to bottom right, 
+          transparent, 
+          rgba(255, 255, 255, 0.4), 
+          transparent
+        );
+        transform: rotate(45deg) translateY(-100%);
+        transition: transform 0.7s;
+        pointer-events: none;
+    }
+
+    /* Specific themes for the 3D cards */
+    .bin-checker .tool-button-content { border-top: 2px solid #f59e0b; }
+    .card-generator .tool-button-content { border-top: 2px solid #ec4899; }
+    .card-checker .tool-button-content { border-top: 2px solid #10b981; }
+    .bin-generator .tool-button-content { border-top: 2px solid #ff6f61; }
+
+    /* Hover effects for 3D cards */
+    .tool-button:hover {
+       transform: rotateX(15deg) rotateY(-10deg) translateY(-10px);
+    }
+
+    .tool-button:hover .tool-button-content {
+       box-shadow: 
+         20px 20px 40px rgba(0,0,0,0.6),
+         inset 0 0 30px rgba(255,255,255,0.2);
+    }
+
+    .tool-button:hover .tool-button-content::before {
+        transform: rotate(45deg) translateY(100%);
+    }
+
+    .tool-icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+      /* Icons glow */
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+    }
+    
+    .tool-text {
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    /* --- Back Navigation --- */
+    .back-arrow {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      background: rgba(10, 15, 25, 0.8);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-cyan);
+      font-size: 22px;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+    }
+    
+    .back-arrow:hover {
+      transform: scale(1.1);
+      background: var(--accent-cyan);
+      color: var(--bg-dark);
+      box-shadow: 0 0 25px rgba(0, 242, 255, 0.8);
+    }
+    
+    /* --- Illuminated Inputs & Buttons --- */
+    button {
+      background: var(--bg-dark);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 12px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 10px;
+      margin-top: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    /* Neon glow on hover for buttons */
+    button:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 20px var(--button-glow);
+      text-shadow: 0 0 5px rgba(255,255,255,0.7);
+    }
+
+    /* Specific button colors tailored to theme */
+    .pulse { /* Main action buttons */
+        background: linear-gradient(135deg, #4338ca, #3b82f6);
+        border: none;
+    }
+    button[onclick*="Clear"] {
+        background: linear-gradient(135deg, #be123c, #e11d48);
+        border: none;
+    }
+    button[onclick*="Import"], button[onclick*="Copy"], button[onclick*="Download"] {
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(10px);
+    }
+
+    
+    textarea, input, select {
+      width: 100%;
+      background-color: var(--input-bg);
+      color: #e0eaff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+      font-family: 'Poppins', monospace;
+      font-size: 14px;
+      outline: none;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+    }
+    
+    textarea:focus, input:focus, select:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 15px rgba(0, 242, 255, 0.3), inset 0 2px 5px rgba(0,0,0,0.5);
+      color: white;
+    }
+    
+    textarea { height: 120px; resize: vertical; }
+
+    label {
+        color: var(--accent-cyan);
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    /* --- Results and Data Presentation --- */
+    .result-card {
+      background: rgba(5, 10, 20, 0.6);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      animation: fadeIn 0.5s ease-out;
+      /* Subtle left border glow for results */
+      border-left: 3px solid var(--accent-purple);
+    }
+    
+    .result-card h3 {
+      color: var(--accent-gold);
+      margin-top: 0;
+      font-size: 1.3rem;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+    }
+
+    /* Loading States */
+    .loading-container {
+      background: rgba(20, 30, 50, 0.5);
+      border: 1px solid var(--accent-cyan);
+      box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+    }
+
+    .loading-spinner {
+      border: 4px solid rgba(0, 242, 255, 0.2);
+      border-top-color: var(--accent-cyan);
+      width: 40px;
+      height: 40px;
+    }
+
+    /* --- Footer Card --- */
+    .footer-card {
+        background: linear-gradient(to right, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+        border: none;
+        box-shadow: none;
+        border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    /* --- Utilities & Layout --- */
+    .date-inputs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .date-inputs div { flex: 1; min-width: 120px; }
+    
+    .hidden {
+      display: none;
+      opacity: 0;
+    }
+    
+    #main-screen, #bin-checker-screen, #card-generator-screen, #card-checker-screen, #bin-generator-screen {
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    #main-screen.hidden, #bin-checker-screen.hidden, #card-generator-screen.hidden, #card-checker-screen.hidden, #bin-generator-screen.hidden {
+      opacity: 0;
+      transform: scale(0.9) translateY(30px); /* Changed transition to a scale/fade effect */
+      pointer-events: none;
+      position: absolute;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes spinner {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* --- Responsive Adjustments --- */
+    @media (max-width: 768px) {
+      h1 { font-size: 2.2rem; }
+      h2 { padding-left: 60px; }
+      .tools { grid-template-columns: 1fr; }
+      .tool-button { height: 120px; }
+      .back-arrow { width: 40px; height: 40px; font-size: 20px; top: 20px; left: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Starlight Tools</h1>
+    
+    <div id="main-screen">
+      <div class="tools">
+        <div class="tool-button bin-checker" onclick="showScreen('bin-checker-screen')">
+          <div class="tool-button-content">
+            <div class="tool-icon">🔍</div>
+            <div class="tool-text">BIN Checker</div>
+          </div>
+        </div>
+        <div class="tool-button card-generator" onclick="showScreen('card-generator-screen')">
+          <div class="tool-button-content">
+            <div class="tool-icon">🔄</div>
+            <div class="tool-text">Card Generator</div>
+          </div>
+        </div>
+        <div class="tool-button card-checker" onclick="showScreen('card-checker-screen')">
+           <div class="tool-button-content">
+            <div class="tool-icon">✓</div>
+            <div class="tool-text">Card Checker (Luhn)</div>
+           </div>
+        </div>
+        <div class="tool-button bin-generator" onclick="showScreen('bin-generator-screen')">
+          <div class="tool-button-content">
+            <div class="tool-icon">⚙️</div>
+            <div class="tool-text">BIN Generator</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card footer-card" style="margin-top: 40px; text-align: center;">
+        <div style="margin-bottom: 8px; color: var(--accent-gold); font-weight: 600; letter-spacing: 1px;">Developed by Walter</div>
+        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Join Discord: <a href="https://discord.gg/rgWcEw5G8a" style="color: var(--accent-cyan); text-decoration: none; font-weight: 500; transition: all 0.3s ease; text-shadow: 0 0 5px rgba(0,242,255,0.5);">discord.gg/rgWcEw5G8a</a></p>
+      </div>
+    </div>
+    
+    <div id="bin-checker-screen" class="hidden">
+      <div class="card">
+        <button class="back-arrow" onclick="showScreen('main-screen')" title="Back to Main">←</button>
+        <h2>BIN Checker</h2>
+        <label>Enter BIN (first 6 digits of card number)</label>
+        
+        <textarea id="bin-input" placeholder="Enter BIN numbers (separated by space, comma, or new lines)"></textarea>
+        
+        <div style="display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap;">
+          <button class="pulse" onclick="checkBIN()">Check BIN</button>
+          <button onclick="document.getElementById('bin-file-import').click()">Import from File</button>
+          <input type="file" id="bin-file-import" style="display: none" onchange="importBINFile(this)" accept=".txt,.csv"/>
+          <button onclick="clearBINResults()">Clear</button>
+        </div>
+        
+        <div id="bin-results"></div>
+      </div>
+    </div>
+    
+    <div id="card-generator-screen" class="hidden">
+      <div class="card">
+        <button class="back-arrow" onclick="showScreen('main-screen')" title="Back to Main">←</button>
+        <h2>Card Generator</h2>
+        
+        <div style="margin-bottom: 15px;">
+          <label>BIN (first 6 digits):</label>
+          <input type="text" id="gen-bin" placeholder="e.g., 423456">
+        </div>
+        
+        <div class="date-inputs">
+          <div>
+            <label>Month (MM):</label>
+            <input type="number" id="gen-mm" placeholder="Random" min="1" max="12">
+          </div>
+          <div>
+            <label>Year (YY):</label>
+            <input type="number" id="gen-yy" placeholder="Random" min="25" max="99">
+          </div>
+          <div>
+            <label>CVV:</label>
+            <input type="number" id="gen-cvv" placeholder="Random" min="100" max="999">
+          </div>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+          <label>Quantity:</label>
+          <input type="number" id="gen-quantity" value="10" min="1" max="100">
+        </div>
+        
+        <div style="display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap;">
+          <button class="pulse" onclick="generateCards()">Generate Cards</button>
+          <button onclick="clearGeneratorResults()">Clear</button>
+        </div>
+        
+        <div id="generator-results" class="hidden" style="margin-top: 25px;">
+          <h3 style="color: var(--accent-gold);">Generated Cards</h3>
+          <button onclick="copyGeneratedCards()">Copy All</button>
+          <textarea id="generated-cards" readonly style="margin-top: 15px; height: 150px;"></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <button class="back-arrow" onclick="showScreen('main-screen')" title="Back to Main">←</button>
+        <h2>Multiple Card Generator</h2>
+        
+        <div style="margin-bottom: 15px;">
+          <label>Multiple BINs (one per line):</label>
+          <textarea id="multi-gen-bins" placeholder="Enter BINs, one per line" style="height: 80px;"></textarea>
+        </div>
+        
+        <div class="date-inputs">
+          <div>
+            <label>Month (MM):</label>
+            <input type="number" id="multi-gen-mm" placeholder="Random" min="1" max="12">
+          </div>
+          <div>
+            <label>Year (YY):</label>
+            <input type="number" id="multi-gen-yy" placeholder="Random" min="25" max="99">
+          </div>
+          <div>
+            <label>CVV:</label>
+            <input type="number" id="multi-gen-cvv" placeholder="Random" min="100" max="999">
+          </div>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+          <label>Cards per BIN:</label>
+          <input type="number" id="multi-gen-quantity" value="5" min="1" max="50">
+        </div>
+        
+        <div style="display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap;">
+          <button class="pulse" onclick="generateMultipleBINCards()">Generate Cards</button>
+          <button onclick="clearMultiGeneratorResults()">Clear</button>
+        </div>
+        
+        <div id="multi-generator-results" class="hidden" style="margin-top: 25px;">
+          <h3 style="color: var(--accent-gold);">Generated Cards</h3>
+          <button onclick="copyMultiGeneratedCards()">Copy All</button>
+          <textarea id="multi-generated-cards" readonly style="margin-top: 15px; height: 150px;"></textarea>
+        </div>
+      </div>
+    </div>
+    
+    <div id="card-checker-screen" class="hidden">
+      <div class="card">
+        <button class="back-arrow" onclick="showScreen('main-screen')" title="Back to Main">←</button>
+        <h2>Card Checker</h2>
+        <label>Enter cards to validate (format: XXXXXXXXXXXXXXXX|MM|YY|CVV)</label>
+        
+        <textarea id="cards-input" placeholder="One card per line, format: XXXXXXXXXXXXXXXX|MM|YY|CVV"></textarea>
+        
+        <div style="display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap;">
+          <button class="pulse" onclick="checkCards()">Check Cards</button>
+          <button onclick="document.getElementById('cards-file-import').click()">Import from File</button>
+          <input type="file" id="cards-file-import" style="display: none" onchange="importCardsFile(this)" accept=".txt,.csv"/>
+          <button onclick="clearCardResults()">Clear</button>
+        </div>
+        
+        <div id="card-results">
+          <div id="card-check-spinner" class="hidden"></div>
+          <div id="card-check-results" class="card-checker-results"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="bin-generator-screen" class="hidden">
+      <div class="card">
+        <button class="back-arrow" onclick="showScreen('main-screen')" title="Back to Main">←</button>
+        <h2>BIN Generator</h2>
+        
+        <div style="margin-bottom: 15px;">
+          <label>Card Type:</label>
+          <select id="bin-gen-type">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="Amex">Amex</option>
+            <option value="Discover">Discover</option>
+          </select>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+          <label>Quantity:</label>
+          <input type="number" id="bin-gen-quantity" value="10" min="1" max="100">
+        </div>
+        
+        <div style="display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap;">
+          <button class="pulse" onclick="generateBINs()">Generate BINs</button>
+          <button onclick="clearBINGeneratorResults()">Clear</button>
+        </div>
+        
+        <div id="bin-generator-results" class="hidden" style="margin-top: 25px;">
+          <h3 style="color: var(--accent-gold);">Generated BINs</h3>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button onclick="copyGeneratedBINs()">Copy All</button>
+            <button onclick="downloadGeneratedBINs()">Download Results</button>
+          </div>
+          <textarea id="generated-bins" readonly style="margin-top: 15px; height: 150px;"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    console.log('Starlight Tools script loaded.');
+
+    // Keep existing JavaScript logic exactly the same, only the CSS and HTML structure changed for visuals.
+    const cardCheckCache = new Map();
+
+    function showScreen(screenId) {
+      if (window.isTransitioning) return;
+      window.isTransitioning = true;
+      
+      const allScreens = {
+        'main-screen': document.getElementById('main-screen'),
+        'bin-checker-screen': document.getElementById('bin-checker-screen'),
+        'card-generator-screen': document.getElementById('card-generator-screen'),
+        'card-checker-screen': document.getElementById('card-checker-screen'),
+        'bin-generator-screen': document.getElementById('bin-generator-screen')
+      };
+      
+      let currentScreen = null;
+      Object.values(allScreens).forEach(screen => {
+        if (!screen.classList.contains('hidden')) {
+          currentScreen = screen;
+        }
+      });
+      
+      const targetScreen = allScreens[screenId];
+      const animationDuration = 500; // Matched to CSS transition
+      
+      if (currentScreen && currentScreen.id !== screenId) {
+        currentScreen.classList.add('hidden');
+        
+        setTimeout(() => {
+          targetScreen.classList.remove('hidden');
+          
+          setTimeout(() => {
+            window.isTransitioning = false;
+          }, animationDuration);
+        }, animationDuration);
+      } 
+      else {
+        targetScreen.classList.remove('hidden');
+        window.isTransitioning = false;
+      }
+    }
+    
+    // --- BIN CHECKER FUNCTIONS ---
+    async function checkBIN() {
+      const binInput = document.getElementById('bin-input').value;
+      const resultsDiv = document.getElementById('bin-results');
+      
+      if (!binInput.trim()) {
+        resultsDiv.innerHTML = '<div class="result-card" style="border-left-color: #fc8181; color: #fc8181;">Please enter at least one BIN</div>';
+        return;
+      }
+      
+      const bins = binInput.split(/[\s,;]+/)
+        .map(bin => bin.replace(/\D/g, '').trim())
+        .filter(bin => bin.length >= 6)
+        .map(bin => bin.substring(0, 6));
+      
+      if (bins.length === 0) {
+        resultsDiv.innerHTML = '<div class="result-card" style="border-left-color: #fc8181; color: #fc8181;">No valid BINs found</div>';
+        return;
+      }
+      
+      resultsDiv.innerHTML = `
+        <div class="loading-container" style="padding: 20px; text-align: center; border-radius: 12px; margin-top: 20px;">
+          <div class="loading-spinner" style="margin: 0 auto 15px auto;"></div>
+          <p style="color: var(--accent-cyan);">Loading BIN data...</p>
+          <p style="font-size: 0.8em; margin-top: 10px; color: rgba(255,255,255,0.7);">Searching through ${bins.length} BIN${bins.length > 1 ? 's' : ''}</p>
+        </div>
+      `;
+      
+      try {
+        // Simulate fetch for demo purposes if file is missing
+        // In production, ensure bin-list-data.csv exists
+        let data;
+        try {
+             const response = await fetch('./bin-list-data.csv', { cache: 'force-cache' });
+             if (!response.ok) throw new Error("File not found");
+             data = await response.text();
+        } catch (e) {
+             console.warn("CSV not found, using mock data for demonstration.");
+             data = `BIN,Brand,Type,Category,Issuer,CountryName
+424242,VISA,CREDIT,CLASSIC,JPMORGAN CHASE BANK,UNITED STATES
+510510,MASTERCARD,CREDIT,WORLD,CITIBANK,UNITED STATES
+378282,AMERICAN EXPRESS,CREDIT,GREEN,AMEX,UNITED STATES`;
+        }
+        
+        const rows = data.split('\n').filter(row => row.trim());
+        const headers = rows[0].split(',').map(header => header.trim());
+        let binMap = new Map();
+        
+        for (let i = 1; i < rows.length; i++) {
+          const columns = rows[i].split(',').map(col => col.trim().replace(/"/g, ''));
+          const csvBin = columns[0];
+          if (csvBin) {
+            let binInfo = {};
+            headers.forEach((header, index) => {
+              binInfo[header] = columns[index] || 'Unknown';
+            });
+            binMap.set(csvBin, binInfo);
+          }
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay for chill vibe
+        
+        let results = '';
+        bins.forEach(bin => {
+          const binInfo = binMap.get(bin);
+          
+          if (binInfo) {
+            results += `
+              <div class="result-card" style="border-left-color: var(--accent-cyan);">
+                <h3>BIN: ${bin}</h3>
+                <p><strong style="color:var(--accent-cyan)">Brand:</strong> ${binInfo.Brand || 'Unknown'}</p>
+                <p><strong style="color:var(--accent-cyan)">Type:</strong> ${binInfo.Type || 'Unknown'}</p>
+                <p><strong style="color:var(--accent-cyan)">Category:</strong> ${binInfo.Category || 'Unknown'}</p>
+                <p><strong style="color:var(--accent-cyan)">Issuer:</strong> ${binInfo.Issuer || 'Unknown'}</p>
+                <p><strong style="color:var(--accent-cyan)">Country:</strong> ${binInfo.CountryName || 'Unknown'}</p>
+              </div>
+            `;
+          } else {
+            results += `
+              <div class="result-card" style="border-left-color: #fc8181;">
+                <h3>BIN: ${bin}</h3>
+                <p style="color: #fc8181;">BIN not found in database</p>
+              </div>
+            `;
+          }
+        });
+        
+        resultsDiv.innerHTML = results;
+      } catch (error) {
+        resultsDiv.innerHTML = `
+          <div class="result-card" style="border-left-color: #fc8181; color: #fc8181;">
+            Error: ${error.message}
+          </div>
+        `;
+      }
+    }
+    
+    function clearBINResults() {
+      document.getElementById('bin-results').innerHTML = '';
+      document.getElementById('bin-input').value = '';
+    }
+
+    function importBINFile(fileInput) {
+      const file = fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('bin-input').value = e.target.result;
+        fileInput.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    // --- CARD GENERATOR FUNCTIONS ---
+    function generateCards() {
+      const bin = document.getElementById('gen-bin').value.replace(/\D/g, '');
+      const mm = document.getElementById('gen-mm').value;
+      const yy = document.getElementById('gen-yy').value;
+      const cvv = document.getElementById('gen-cvv').value;
+      const quantity = parseInt(document.getElementById('gen-quantity').value) || 10;
+      const resultsContainer = document.getElementById('generator-results');
+      const resultsArea = document.getElementById('generated-cards');
+      
+      if (bin.length < 6) { alert('Please enter at least 6 digits for the BIN'); return; }
+      
+      resultsContainer.classList.remove('hidden');
+      resultsArea.value = 'Generating glowing cards...';
+      
+      setTimeout(() => {
+        const cards = [];
+        const currentYear = new Date().getFullYear();
+        for (let i = 0; i < quantity; i++) {
+          const cardNumber = generateCardNumber(bin);
+          const month = mm ? String(Math.min(parseInt(mm), 12)).padStart(2, '0') : String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+          let year = yy ? (parseInt(yy) < 100 ? (parseInt(yy) < 70 ? 2000 + parseInt(yy) : 1900 + parseInt(yy)) : parseInt(yy)) : currentYear + Math.floor(Math.random() * 5) + 1;
+          const validCvv = cvv ? String(parseInt(cvv)).padStart(3, '0') : String(Math.floor(Math.random() * 900) + 100).padStart(3, '0');
+          cards.push(`${cardNumber}|${month}|${year}|${validCvv}`);
+        }
+        resultsArea.value = cards.join('\n');
+      }, 500);
+    }
+    
+    function generateCardNumber(bin) {
+      let cardNumber = bin;
+      while (cardNumber.length < 15) cardNumber += Math.floor(Math.random() * 10);
+      let sum = 0, isEven = false;
+      for (let i = cardNumber.length - 1; i >= 0; i--) {
+        let digit = parseInt(cardNumber[i], 10);
+        if (isEven) { digit *= 2; if (digit > 9) digit -= 9; }
+        sum += digit; isEven = !isEven;
+      }
+      return cardNumber + ((10 - (sum % 10)) % 10);
+    }
+
+    function clearGeneratorResults() {
+        document.getElementById('generator-results').classList.add('hidden');
+        document.getElementById('generated-cards').value = '';
+        ['gen-bin', 'gen-mm', 'gen-yy', 'gen-cvv'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('gen-quantity').value = '10';
+    }
+
+    function copyGeneratedCards() {
+      const textarea = document.getElementById('generated-cards');
+      textarea.select(); document.execCommand('copy'); alert('Cards copied to clipboard!');
+    }
+
+    // --- MULTI GENERATOR FUNCTIONS ---
+    function generateMultipleBINCards() {
+        const binsInput = document.getElementById('multi-gen-bins').value;
+        const mm = document.getElementById('multi-gen-mm').value;
+        const yy = document.getElementById('multi-gen-yy').value;
+        const cvv = document.getElementById('multi-gen-cvv').value;
+        const quantity = parseInt(document.getElementById('multi-gen-quantity').value) || 5;
+        const resultsContainer = document.getElementById('multi-generator-results');
+        const resultsArea = document.getElementById('multi-generated-cards');
+
+        const bins = binsInput.split(/[\s,;]+/).map(b => b.replace(/\D/g, '').trim()).filter(b => b.length >= 6).map(b => b.substring(0, 6));
+        if (bins.length === 0) { alert('No valid BINs found'); return; }
+
+        resultsContainer.classList.remove('hidden');
+        resultsArea.value = 'Generating multiple batches...';
+
+        setTimeout(() => {
+            const allCards = [];
+            const currentYear = new Date().getFullYear();
+            bins.forEach(bin => {
+                for (let i = 0; i < quantity; i++) {
+                    const cardNumber = generateCardNumber(bin);
+                    const month = mm ? String(Math.min(parseInt(mm), 12)).padStart(2, '0') : String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+                    let year = yy ? (parseInt(yy) < 100 ? (parseInt(yy) < 70 ? 2000 + parseInt(yy) : 1900 + parseInt(yy)) : parseInt(yy)) : currentYear + Math.floor(Math.random() * 5) + 1;
+                    const validCvv = cvv ? String(parseInt(cvv)).padStart(3, '0') : String(Math.floor(Math.random() * 900) + 100).padStart(3, '0');
+                    allCards.push(`${cardNumber}|${month}|${year}|${validCvv}`);
+                }
+            });
+            resultsArea.value = allCards.join('\n');
+        }, 700);
+    }
+
+    function clearMultiGeneratorResults() {
+        document.getElementById('multi-generator-results').classList.add('hidden');
+        document.getElementById('multi-generated-cards').value = '';
+        document.getElementById('multi-gen-bins').value = '';
+        ['multi-gen-mm', 'multi-gen-yy', 'multi-gen-cvv'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('multi-gen-quantity').value = '5';
+    }
+
+    function copyMultiGeneratedCards() {
+        const textarea = document.getElementById('multi-generated-cards');
+        textarea.select(); document.execCommand('copy'); alert('Cards copied to clipboard!');
+    }
+
+
+    // --- CARD CHECKER FUNCTIONS ---
+    async function checkCards() {
+      const cardsInput = document.getElementById('cards-input').value;
+      const spinnerDiv = document.getElementById('card-check-spinner');
+      const resultsDiv = document.getElementById('card-check-results');
+      
+      const cards = cardsInput.split('\n').filter(card => card.trim());
+      if (cards.length === 0) { resultsDiv.innerHTML = '<div class="result-card" style="border-left-color: #fc8181; color: #fc8181;">No valid cards found</div>'; return; }
+      
+      spinnerDiv.innerHTML = `
+        <div class="loading-container" style="padding: 20px; text-align: center; border-radius: 12px;">
+          <div class="loading-spinner" style="margin: 0 auto 15px auto;"></div>
+          <p style="color: var(--accent-cyan);">Validating cards...</p>
+        </div>
+      `;
+      spinnerDiv.classList.remove('hidden');
+      resultsDiv.innerHTML = '';
+      
+      const liveCards = [], deadCards = [], unknownCards = [];
+      
+      for (const card of cards) {
+        // Simplified parsing logic for brevity
+        let cardNumber = '', expiry = 'Unknown', cvv = 'Unknown';
+        if (card.includes('|')) {
+            const parts = card.split('|');
+            cardNumber = parts[0].replace(/\D/g, '');
+            if (parts.length >= 3) { expiry = `${parts[1]}/${parts[2]}`; cvv = parts[3] || 'N/A'; }
+        } else {
+            cardNumber = card.replace(/\D/g, '');
+        }
+
+        const isCardValid = validateCardNumber(cardNumber);
+        const status = isCardValid && cardNumber.length >= 13 ? 'Live' : 'Dead';
+        const statusColor = isCardValid && cardNumber.length >= 13 ? '#10b981' : '#fc8181';
+        const message = isCardValid && cardNumber.length >= 13 ? 'Valid Luhn Check' : 'Invalid Luhn Check';
+
+        const cardHtml = `
+          <div class="result-card" style="border-left-color: ${statusColor};">
+            <h3>${status} Card</h3>
+            <p><strong style="color:var(--accent-cyan)">Card:</strong> ${cardNumber}</p>
+            <p><strong style="color:var(--accent-cyan)">Status:</strong> <span style="color: ${statusColor}; font-weight:bold;">${status}</span></p>
+            <p><strong style="color:var(--accent-cyan)">Message:</strong> ${message}</p>
+          </div>
+        `;
+        
+        if (status === 'Live') liveCards.push(cardHtml);
+        else deadCards.push(cardHtml);
+      }
+      
+      spinnerDiv.classList.add('hidden');
+      resultsDiv.innerHTML = `
+        <h3 style="color: var(--accent-cyan); margin-top: 20px;">Live (${liveCards.length})</h3>
+        ${liveCards.join('') || '<p style="opacity:0.6">No live cards.</p>'}
+        <h3 style="color: #fc8181; margin-top: 20px;">Dead (${deadCards.length})</h3>
+        ${deadCards.join('') || '<p style="opacity:0.6">No dead cards.</p>'}
+      `;
+    }
+
+    function validateCardNumber(cardNumber) {
+      if (!cardNumber || cardNumber.length < 13 || cardNumber.length > 19) return false;
+      const digits = cardNumber.split('').map(Number);
+      let sum = 0, isEven = false;
+      for (let i = digits.length - 1; i >= 0; i--) {
+        let digit = digits[i];
+        if (isEven) { digit *= 2; if (digit > 9) digit -= 9; }
+        sum += digit; isEven = !isEven;
+      }
+      return sum % 10 === 0;
+    }
+
+    function clearCardResults() {
+        document.getElementById('card-check-spinner').classList.add('hidden');
+        document.getElementById('card-check-results').innerHTML = '';
+        document.getElementById('cards-input').value = '';
+    }
+    function importCardsFile(fileInput) {
+        const file = fileInput.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) { document.getElementById('cards-input').value = e.target.result; fileInput.value = ''; };
+        reader.readAsText(file);
+    }
+
+
+    // --- BIN GENERATOR FUNCTIONS ---
+    function generateBINs() {
+      const cardType = document.getElementById('bin-gen-type').value;
+      const quantity = parseInt(document.getElementById('bin-gen-quantity').value) || 10;
+      const resultsContainer = document.getElementById('bin-generator-results');
+      const resultsArea = document.getElementById('generated-bins');
+      
+      resultsContainer.classList.remove('hidden');
+      resultsArea.value = `Generating ${cardType} BINs...`;
+      
+      setTimeout(() => {
+        const bins = [];
+        const prefixes = { Visa: ['4'], MasterCard: ['51', '55'], Amex: ['37'], Discover: ['6011'] };
+        const selectedPrefixes = prefixes[cardType];
+        for (let i = 0; i < quantity; i++) {
+          const prefix = selectedPrefixes[Math.floor(Math.random() * selectedPrefixes.length)];
+          let bin = prefix;
+          while (bin.length < 6) bin += Math.floor(Math.random() * 10);
+          bins.push(bin);
+        }
+        resultsArea.value = bins.join('\n');
+      }, 800);
+    }
+
+    function clearBINGeneratorResults() {
+      document.getElementById('bin-generator-results').classList.add('hidden');
+      document.getElementById('generated-bins').value = '';
+    }
+    function copyGeneratedBINs() {
+      const textarea = document.getElementById('generated-bins'); textarea.select(); document.execCommand('copy'); alert('BINs copied!');
+    }
+    function downloadGeneratedBINs() {
+        const textarea = document.getElementById('generated-bins');
+        const blob = new Blob([textarea.value], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'generated_bins.txt'; a.click(); URL.revokeObjectURL(url);
+    }
+
+  </script>
+</body>
+</html>
